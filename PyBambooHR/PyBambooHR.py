@@ -1,21 +1,16 @@
-#!/usr/bin/env python
-#encoding:utf-8
-#author:smeggingsmegger/Scott Blevins
-#project:PyBambooHR
-#repository:http://github.com/smeggingsmegger/PyBambooHR
-#license:mit (http://opensource.org/licenses/MIT)
-
 """
-PyBambooHR.py contains a class by the same name with functions that correspond
-to BambooHR API calls defined at http://www.bamboohr.com/api/documentation/.
+PyBambooHR: A Python wrapper for the BambooHR API.
+See https://documentation.bamboohr.com/reference for API documentation.
 """
 
 import datetime
 import os
+from os.path import basename
+
 import requests
+
 from . import utils
 from .utils import make_field_xml
-from os.path import basename
 
 class PyBambooHR:
     """
@@ -162,7 +157,6 @@ class PyBambooHR:
             "commisionDate": ("date", ""),
             "commissionAmount": ("currency", ""),
             "commissionComment": ("text", ""),
-            "commissionComment": ("text", ""),
             "benefitClassDate": ("date", ""),
             "benefitClassClass": ("list", ""),
             "benefitClassChangeReason": ("list", ""),
@@ -307,7 +301,7 @@ class PyBambooHR:
             'fields': ",".join(get_fields)
         }
 
-        if self.only_current == False:
+        if not self.only_current:
             payload.update({
                 'onlyCurrent': 'false'
             })
