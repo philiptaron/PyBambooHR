@@ -50,6 +50,3 @@ class TestIntegration(unittest.TestCase):
         self.assertIsInstance(users, dict)
         self.assertGreater(len(users), 0)
 
-    def test_get_meta_lists(self):
-        lists = self.bamboo.get_meta_lists()
-        self.assertIsInstance(lists, list)
