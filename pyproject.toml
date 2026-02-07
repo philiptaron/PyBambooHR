@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "PyBambooHR"
+version = "0.9.0"
+description = "A Python wrapper for the BambooHR API"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.11"
+authors = [
+    { name = "Scott Blevins", email = "sblevins@gmail.com" },
+]
+maintainers = [
+    { name = "Philip Taron", email = "philip@taron.dev" },
+]
+keywords = ["Bamboo", "HR", "BambooHR", "API"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    "requests>=2.28.0",
+    "xmltodict>=0.13.0",
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest>=7.0",
+    "httpretty>=1.1.4",
+]
+
+[project.urls]
+Homepage = "https://github.com/philiptaron/PyBambooHR"
+Repository = "https://github.com/philiptaron/PyBambooHR"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
