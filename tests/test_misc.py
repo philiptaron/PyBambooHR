@@ -1,24 +1,12 @@
-#!/usr/bin/env python
-#encoding:utf-8
-#author:smeggingsmegger/Scott Blevins
-#project:PyBambooHR
-#repository:http://github.com/smeggingsmegger/PyBambooHR
-#license:agpl-3.0 (http://www.gnu.org/licenses/agpl-3.0.en.html)
+"""Tests for miscellaneous utility functions."""
 
-"""Unittests for misc. functions
-"""
-
-import os
-import sys
 import unittest
 
-# Force parent directory onto path
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from PyBambooHR import PyBambooHR, utils
+from PyBambooHR import PyBambooHR
+from PyBambooHR import utils
 
 
-class test_misc(unittest.TestCase):
+class TestMisc(unittest.TestCase):
     # Used to store the cached instance of PyBambooHR
     bamboo = None
 
@@ -78,7 +66,6 @@ class test_misc(unittest.TestCase):
 
         xml = utils.make_field_xml('123', None, pre='\t', post='\n')
         self.assertEqual('\t<field id="123" />\n', xml)
-        pass
 
     def test__format_row_xml(self):
         row = {'f1': 'v1', 'f2': 'v2'}
@@ -140,3 +127,11 @@ class test_misc(unittest.TestCase):
                           'row_id': '999'}]}
 
         self.assertEqual(table, utils.transform_tabular_data(xml))
+
+    def test_escape_double_encoding(self):
+        """Verify that escape() does not double-encode '&' in replacements."""
+        result = utils.escape('a & b < c')
+        self.assertEqual('a &amp; b &lt; c', result)
+
+        result = utils.escape('<script>alert("xss")</script>')
+        self.assertEqual('&lt;script&gt;alert(&quot;xss&quot;)&lt;/script&gt;', result)
