@@ -17,26 +17,7 @@ from . import config
 from .utils import make_field_xml
 from os.path import basename
 
-# Python 3 basestring compatibility:
-try:
-    unicode = unicode
-except NameError:
-    # unicode is undefined: We are running Python 3
-    unicode = str
-
-    # basestring is undefined: We are running Python 3
-    try:
-        basestring
-    except NameError:
-        basestring = str
-
-    basestring = (str, bytes)
-else:
-    # unicode is defined: We are running Python 2
-    bytes = str
-
-
-class PyBambooHR(object):
+class PyBambooHR:
     """
     The PyBambooHR class is initialized with an API key, company subdomain,
     and an optional datatype argument (defaults to JSON). This class implements
