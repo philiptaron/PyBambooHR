@@ -243,9 +243,9 @@ def change_keys(obj):
     return new
 
 XML_ESCAPES = (
+    ('&', '&amp;'),
     ('<', '&lt;'),
     ('>', '&gt;'),
-    ('&', '&amp;'),
     ("'", '&apos;'),
     ('"', '&quot;'),
 )
