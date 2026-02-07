@@ -1,7 +1,5 @@
 *.py[cod]
-
-.pypirc
-env
+__pycache__/
 
 # C extensions
 *.so
@@ -27,7 +25,7 @@ pip-log.txt
 # Unit test / coverage reports
 .coverage
 .tox
-nosetests.xml
+.pytest_cache/
 
 # Translations
 *.mo
@@ -36,3 +34,15 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
+
+# Virtual environments
+.venv/
+venv/
+
+# Nix
+result
+result-*
+
+# IDEs
+.idea/
+.vscode/
