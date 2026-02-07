@@ -215,7 +215,7 @@ class PyBambooHR(object):
         @param employee: Dictionary containing row data information.
         """
         xml_fields = ''
-        for k, v in row.iteritems():
+        for k, v in row.items():
             xml_fields += make_field_xml(k, v, pre='\t', post='\n')
 
         xml = "<row>\n{}</row>".format(xml_fields)
