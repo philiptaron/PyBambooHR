@@ -87,7 +87,7 @@ class PyBambooHR(object):
 
         # We are focusing on JSON for now.
         if self.datatype == 'XML':
-            raise NotImplemented("Returning XML is not currently supported.")
+            raise NotImplementedError("Returning XML is not currently supported.")
 
         if self.datatype == 'JSON':
             self.headers.update({'Accept': 'application/json'})
