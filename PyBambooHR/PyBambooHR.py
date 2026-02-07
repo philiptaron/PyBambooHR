@@ -11,9 +11,9 @@ to BambooHR API calls defined at http://www.bamboohr.com/api/documentation/.
 """
 
 import datetime
+import os
 import requests
 from . import utils
-from . import config
 from .utils import make_field_xml
 from os.path import basename
 
@@ -34,10 +34,10 @@ class PyBambooHR:
         @param datatype: String of 'JSON' or 'XML'. Sets the Accept header for return type in our HTTP requests to BambooHR.
         """
         if not api_key:
-            api_key = config.api_key
+            api_key = os.environ.get('BAMBOOHR_API_KEY', '')
 
         if not subdomain:
-            subdomain = config.subdomain
+            subdomain = os.environ.get('BAMBOOHR_SUBDOMAIN', '')
 
         # API Version
         self.api_version = 'v1'
