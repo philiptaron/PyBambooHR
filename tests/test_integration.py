@@ -47,19 +47,11 @@ class TestIntegration(unittest.TestCase):
         self.assertIn("id", employee)
 
     def test_get_all_employees(self):
-        # get_all_employees iterates every user from get_meta_users +
-        # get_employee_directory, calling get_employee on each.  Some
-        # employees may be inaccessible to the API key (403), so we
-        # tolerate HTTPError here and just verify the method runs.
-        from requests import HTTPError
-        try:
-            employees = self.bamboo.get_all_employees(field_list=["firstName", "lastName"])
-            self.assertIsInstance(employees, dict)
-            self.assertGreater(len(employees), 0)
-        except HTTPError as e:
-            if e.response is not None and e.response.status_code == 403:
-                self.skipTest("API key lacks permission for some employees")
-            raise
+        employees = self.bamboo.get_all_employees(field_list=["firstName", "lastName"])
+        self.assertIsInstance(employees, dict)
+        self.assertGreater(len(employees), 0)
+        first_key = next(iter(employees))
+        self.assertIn("firstName", employees[first_key])
 
     def test_get_employee_photo(self):
         employee_id = self._get_first_employee_id()
@@ -75,43 +67,19 @@ class TestIntegration(unittest.TestCase):
 
     def test_get_employee_files(self):
         employee_id = self._get_first_employee_id()
-        from requests import HTTPError
-        try:
-            files = self.bamboo.get_employee_files(employee_id)
-            self.assertIsInstance(files, dict)
-        except HTTPError as e:
-            if e.response is not None and e.response.status_code == 404:
-                self.skipTest("Employee files endpoint returned 404")
-            raise
+        files = self.bamboo.get_employee_files(employee_id)
+        self.assertIsInstance(files, dict)
 
     # --- Tabular data ---
-    # get_tabular_data expects XML responses but BambooHR returns JSON
-    # when the Accept header is application/json.  This is a known
-    # library bug (the Accept header is set globally).  We verify the
-    # API call succeeds and document the XML parse failure.
 
     def test_get_tabular_data(self):
-        from xml.parsers.expat import ExpatError
-        try:
-            data = self.bamboo.get_tabular_data("jobInfo")
-            self.assertIsInstance(data, dict)
-        except ExpatError:
-            self.skipTest(
-                "get_tabular_data sends Accept: application/json but "
-                "tries to parse the response as XML (known bug)"
-            )
+        data = self.bamboo.get_tabular_data("jobInfo")
+        self.assertIsInstance(data, dict)
 
     def test_get_tabular_data_single_employee(self):
-        from xml.parsers.expat import ExpatError
         employee_id = self._get_first_employee_id()
-        try:
-            data = self.bamboo.get_tabular_data("jobInfo", employee_id=employee_id)
-            self.assertIsInstance(data, dict)
-        except ExpatError:
-            self.skipTest(
-                "get_tabular_data sends Accept: application/json but "
-                "tries to parse the response as XML (known bug)"
-            )
+        data = self.bamboo.get_tabular_data("jobInfo", employee_id=employee_id)
+        self.assertIsInstance(data, dict)
 
     # --- Change tracking ---
 

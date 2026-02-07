@@ -4,6 +4,7 @@ See https://documentation.bamboohr.com/reference for API documentation.
 """
 
 import datetime
+import logging
 import os
 from os.path import basename
 
@@ -11,6 +12,8 @@ import requests
 
 from . import utils
 from .utils import make_field_xml
+
+logger = logging.getLogger(__name__)
 
 class PyBambooHR:
     """
@@ -342,9 +345,12 @@ class PyBambooHR:
                 users = {k:v for k,v in users.items() if v}
 
             # get employees data according to field_list
-            for i,uKey in enumerate(users.keys()):
-                if uKey not in self.employees.keys():
-                    self.employees[uKey] = self.get_employee(uKey, field_list=field_list)
+            for uKey in users:
+                if uKey not in self.employees:
+                    try:
+                        self.employees[uKey] = self.get_employee(uKey, field_list=field_list)
+                    except requests.HTTPError as e:
+                        logger.warning("Skipping employee %s: %s", uKey, e)
 
         return self.employees
 
@@ -374,7 +380,8 @@ class PyBambooHR:
         """
 
         url = self.base_url + "employees/{0}/files/view/".format(employee_id)
-        r = requests.get(url, timeout=self.timeout, headers=self.headers, auth=(self.api_key, ''))
+        headers = {**self.headers, 'Accept': 'application/xml'}
+        r = requests.get(url, timeout=self.timeout, headers=headers, auth=(self.api_key, ''))
         r.raise_for_status()
         data = utils.transform_table_data(r.content)
 
@@ -547,7 +554,8 @@ class PyBambooHR:
         the values of the table's fields for a particular date, which is stored by key 'date' in the dictionary.
         """
         url = self.base_url + 'employees/{}/tables/{}'.format(employee_id, table_name)
-        r = requests.get(url, timeout=self.timeout, headers=self.headers, auth=(self.api_key, ''))
+        headers = {**self.headers, 'Accept': 'application/xml'}
+        r = requests.get(url, timeout=self.timeout, headers=headers, auth=(self.api_key, ''))
         r.raise_for_status()
 
         return utils.transform_tabular_data(r.content)
